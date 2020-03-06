@@ -39,6 +39,7 @@ bool APRS_IS::sendMessage(const String & package)
 	if(connected())
 	{
 		_client.println(package);
+		Serial.print("--> ");
 		Serial.println(package);
 		return true;
 	}

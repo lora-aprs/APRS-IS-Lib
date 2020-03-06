@@ -1,15 +1,21 @@
+// You will need this additional library for this example: NTPClient
+
 #include <WiFiMulti.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 #include <APRS-IS.h>
 
 #include "settings.h"
 
 WiFiMulti WiFiMulti;
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, 60*60);
 APRS_IS aprs_is(USER, PASS, TOOL, VERS);
 
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("simple APRS-IS test");
+	Serial.println("simple fixed position");
 
 	WiFiMulti.addAP(WIFI_NAME, WIFI_KEY);
 	Serial.print("Waiting for WiFi");
@@ -26,10 +32,12 @@ void setup()
 	Serial.println(WiFi.localIP());
 
 	delay(500);
+	timeClient.begin();
 }
 
 void loop()
 {
+	timeClient.update();
 	if(WiFiMulti.run() != WL_CONNECTED)
 	{
 		Serial.println("WiFi not connected!");
@@ -51,8 +59,17 @@ void loop()
 		}
 		Serial.println("Connected to server!");
 	}
+	static int update_min = -11;
+	if(timeClient.getMinutes() > update_min + 5)
+	{
+		String message = "AB1CDE-10>APRS,AB1CDE:=1234.12N/12345.12E-QTH von AB1CDE";
+		Serial.print("[" + timeClient.getFormattedTime() + "] ");
+		aprs_is.sendMessage(message);
+		update_min = timeClient.getMinutes();
+	}
 	if(aprs_is.available() > 0)
 	{
+		Serial.print("[" + timeClient.getFormattedTime() + "] ");
 		Serial.println(aprs_is.getMessage());
 	}
 }
