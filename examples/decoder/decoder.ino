@@ -56,8 +56,16 @@ void loop()
 	}
 	if(aprs_is.available() > 0)
 	{
-		APRSMessage msg;
-		msg.decode(aprs_is.getMessage());
-		Serial.println(msg.toString());
+		String msg_ = aprs_is.getMessage();
+		if(msg_.startsWith("#"))
+		{
+			Serial.println(msg_);
+		}
+		else
+		{
+			APRSMessage msg;
+			msg.decode(msg_);
+			Serial.println(msg.toString());
+		}
 	}
 }
