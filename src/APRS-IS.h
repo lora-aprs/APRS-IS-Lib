@@ -1,6 +1,6 @@
 
-#ifndef APRS-IS-Lib_h_
-#define APRS-IS-Lib_h_
+#ifndef APRS_IS_Lib_h_
+#define APRS_IS_Lib_h_
 
 #include <WiFi.h>
 
