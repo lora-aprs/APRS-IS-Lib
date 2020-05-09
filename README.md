@@ -8,3 +8,4 @@ Feel free to fork and upgrade the library!
 * __ESP32__ - tested with hardware on TTGO LORA32
 
 If you have tested the code somewhere else please drop a ticket to track the status in this readme ;)
+
