@@ -1,12 +1,15 @@
 // You will need this additional library for this example: APRS-Decoder-Lib
 
-#include <WiFiMulti.h>
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#else
+#include <WiFi.h>
+#endif
 #include <APRS-IS.h>
 #include <APRS-Decoder.h>
 
 #include "settings.h"
 
-WiFiMulti WiFiMulti;
 APRS_IS aprs_is(USER, PASS, TOOL, VERS);
 
 void setup()
@@ -14,10 +17,11 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("APRS-IS test with decoder");
 
-	WiFiMulti.addAP(WIFI_NAME, WIFI_KEY);
+	WiFi.mode(WIFI_STA);
+	WiFi.begin(WIFI_NAME, WIFI_KEY);
 	Serial.print("Waiting for WiFi");
 
-	while(WiFiMulti.run() != WL_CONNECTED)
+	while(WiFi.status() != WL_CONNECTED)
 	{
 		Serial.print(".");
 		delay(500);
@@ -33,12 +37,6 @@ void setup()
 
 void loop()
 {
-	if(WiFiMulti.run() != WL_CONNECTED)
-	{
-		Serial.println("WiFi not connected!");
-		delay(1000);
-		return;
-	}
 	if(!aprs_is.connected())
 	{
 		Serial.print("connecting to server: ");
