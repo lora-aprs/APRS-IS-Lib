@@ -1,13 +1,16 @@
 // You will need this additional library for this example: NTPClient
 
-#include <WiFiMulti.h>
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#else
+#include <WiFi.h>
+#endif
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include <APRS-IS.h>
 
 #include "settings.h"
 
-WiFiMulti WiFiMulti;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, 60*60);
 APRS_IS aprs_is(USER, PASS, TOOL, VERS);
@@ -17,10 +20,11 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("simple fixed position");
 
-	WiFiMulti.addAP(WIFI_NAME, WIFI_KEY);
+	WiFi.mode(WIFI_STA);
+	WiFi.begin(WIFI_NAME, WIFI_KEY);
 	Serial.print("Waiting for WiFi");
 
-	while(WiFiMulti.run() != WL_CONNECTED)
+	while(WiFi.status() != WL_CONNECTED)
 	{
 		Serial.print(".");
 		delay(500);
@@ -38,12 +42,6 @@ void setup()
 void loop()
 {
 	timeClient.update();
-	if(WiFiMulti.run() != WL_CONNECTED)
-	{
-		Serial.println("WiFi not connected!");
-		delay(1000);
-		return;
-	}
 	if(!aprs_is.connected())
 	{
 		Serial.print("connecting to server: ");
