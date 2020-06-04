@@ -34,16 +34,24 @@ bool APRS_IS::connected()
 	return _client.connected();
 }
 
-bool APRS_IS::sendMessage(const String & package)
+bool APRS_IS::sendMessage(const String & message)
 {
-	if(connected())
+	if(!connected())
 	{
-		_client.println(package);
-		Serial.print("--> ");
-		Serial.println(package);
-		return true;
+		return false;
 	}
-	return false;
+	_client.println(message);
+	return true;
+}
+
+bool APRS_IS::sendMessage(const std::shared_ptr<APRSMessage> message)
+{
+	if(!connected())
+	{
+		return false;
+	}
+	_client.println(message->encode());
+	return true;
 }
 
 int APRS_IS::available()
@@ -59,4 +67,16 @@ String APRS_IS::getMessage()
 		line = _client.readStringUntil('\n');
 	}
 	return line;
+}
+
+std::shared_ptr<APRSMessage> APRS_IS::getAPRSMessage()
+{
+	String line;
+	if (_client.available() > 0)
+	{
+		line = _client.readStringUntil('\n');
+	}
+    std::shared_ptr<APRSMessage> msg = std::shared_ptr<APRSMessage>(new APRSMessage());
+	msg->decode(line);
+	return msg;
 }

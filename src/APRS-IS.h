@@ -7,6 +7,7 @@
 #else
 #include <WiFi.h>
 #endif
+#include <APRS-Decoder.h>
 
 class APRS_IS
 {
@@ -18,11 +19,13 @@ public:
 	bool connect_(const String & server, const int port, const String & login_line);
 	bool connected();
 
-	bool sendMessage(const String & package);
+	bool sendMessage(const String & message);
+	bool sendMessage(const std::shared_ptr<APRSMessage> message);
 
 	int available();
 
 	String getMessage();
+	std::shared_ptr<APRSMessage> getAPRSMessage();
 
 private:
 	const String _user;
