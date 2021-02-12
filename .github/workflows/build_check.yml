@@ -1,5 +1,7 @@
 name: Build check and build
 
+on: [push, pull_request]
+
 jobs:
   PlatformIO-Check:
     runs-on: ubuntu-latest
