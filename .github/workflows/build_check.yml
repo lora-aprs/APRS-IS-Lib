@@ -55,4 +55,3 @@ jobs:
         run: platformio ci --lib="." -c ci_platformio.ini
         env:
           PLATFORMIO_CI_SRC: ${{ matrix.example }}
-
