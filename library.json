@@ -1,0 +1,20 @@
+{
+	"name": "APRS-IS-Lib",
+	"keywords": "aprs, aprs-is, hamradio, lora",
+	"description": "This library will provide an simple interface to the APRS-Servers with the help of APRS-IS.",
+	"authors":
+	[
+	  {
+		"name": "Peter Buchegger",
+		"email": "peter@pbuchegger.at"
+	  }  
+	],
+	"repository":
+	{
+	  "type": "git",
+	  "url": "https://github.com/lora-aprs/APRS-IS-Lib.git"
+	},
+	"version": "0.0.8",
+	"frameworks": "arduino",
+	"platforms": "espressif"
+  }
