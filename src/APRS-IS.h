@@ -16,7 +16,6 @@ public:
 
 	bool connect(const String & server, const int port);
 	bool connect(const String & server, const int port, const String & filter);
-	bool connect_(const String & server, const int port, const String & login_line);
 	bool connected();
 
 	bool sendMessage(const String & message);
@@ -33,6 +32,8 @@ private:
 	const String _tool_name;
 	const String _version;
 	WiFiClient _client;
+
+	bool _connect(const String & server, const int port, const String & login_line);
 };
 
 #endif
